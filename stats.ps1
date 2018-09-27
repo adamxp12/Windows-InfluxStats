@@ -1,5 +1,15 @@
-$proc =get-counter -Counter "\Processor(_Total)\% Processor Time" -SampleInterval 2 -MaxSamples 3
-$cpu=[float]($proc.readings -split ":")[-1]
+# I am still fighting this. I currently think Performance counters do not count in Hyper-V stats as the result of this
+# + the 4% constant Hyper-V usage from Xprotect gets me in very close to what task manager says the CPU usage is
+# If only microsoft gave me a Give-MeTheCPUUsageFromTaskManager function :|
+$proc =get-counter -Counter "\Processor(_total)\% Processor Time" -SampleInterval 2 -MaxSamples 3
+$i = 0
+$proc = $proc | select -expand CounterSamples
+[System.Collections.ArrayList]$a = @()
+
+Foreach ($o in $proc) {
+    $a.Add($o.CookedValue)
+} 
+$cpu = ($a | Measure-Object -Average).Average
 $cpu = [math]::Round($cpu)
 
 $mem = Get-WmiObject Win32_PhysicalMemory | Measure-Object -Property Capacity -Sum
