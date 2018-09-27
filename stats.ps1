@@ -2,7 +2,6 @@
 # + the 4% constant Hyper-V usage from Xprotect gets me in very close to what task manager says the CPU usage is
 # If only microsoft gave me a Give-MeTheCPUUsageFromTaskManager function :|
 $proc =get-counter -Counter "\Processor(_total)\% Processor Time" -SampleInterval 2 -MaxSamples 3
-$i = 0
 $proc = $proc | select -expand CounterSamples
 [System.Collections.ArrayList]$a = @()
 
