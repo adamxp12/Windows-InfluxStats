@@ -1,6 +1,6 @@
-$proc =get-counter -Counter "\Processor(_Total)\% Processor Time" -SampleInterval 2
+$proc =get-counter -Counter "\Processor(_Total)\% Processor Time" -SampleInterval 2 -MaxSamples 3
 $cpu=[float]($proc.readings -split ":")[-1]
-$cpu = [math]::Round($cpu*10)
+$cpu = [math]::Round($cpu)
 
 $mem = Get-WmiObject Win32_PhysicalMemory | Measure-Object -Property Capacity -Sum
 $mem = $mem.sum
